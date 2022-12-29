@@ -15,7 +15,7 @@ public class CalculatorTest extends TestCase {
 	public void testAdd() {
 		Properties prop = new Properties();
 		
-		OutputStream output = hari;
+		OutputStream output = null;
 
 		try
 		{
