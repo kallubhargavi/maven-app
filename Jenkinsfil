@@ -6,25 +6,25 @@ pipeline {
        TOMCAT_USER = "ec2-user"
                 }
     parameters {
-       string defaultValue: 'main', description: 'choose branch to deploy and build', name: 'BRANCH_NAME'
+       string defaultValue: 'main', description: 'choose branch to deploy and build', name: 'branchname'
                 }
 
     stages {
         stage('git checkout') {
         when{
             expression{
-                        params.BRANCH_NAME == "develop"
+                        params.branchname == "develop"
             }
             }
             steps {
-              git branch: "${params.BRANCH_NAME}", credentialsId: 'github', url: 'https://github.com/kallubhargavi/maven-app' 
+              git branch: "${params.branchname}", credentialsId: 'github', url: 'https://github.com/kallubhargavi/maven-app' 
             }
         }
 
         stage('maven build') {
         when{
             expression{
-                        params.BRANCH_NAME == "develop"
+                        params.branchname == "develop"
             }
             }
             steps {
@@ -34,7 +34,7 @@ pipeline {
          stage('tomcat dev') {
          when{
             expression{
-                       params.BRANCH_NAME == "develop"
+                       params.branchname == "develop"
             }
             }
             steps {
