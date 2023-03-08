@@ -31,5 +31,14 @@ pipeline {
             }
         }
     }
+    post {
+  success {
+        echo "job successed, sending success email"
+  }
+  failure {
+        echo "job failed, sending failure email"
+  }
+}
+
 }    
 
