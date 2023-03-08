@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('git checkout') {
+            steps {
+               git credentialsId: 'github', url: 'https://github.com/kallubhargavi/maven-app' 
+            }
+        }
+
+        stage('maven build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+         stage('tomcat dev') {
+            steps {
+                sshagent(['tomcat-deploy']) {
+                sh "scp -o StrictHostKeyChecking=no  target/*.war ec2-user@172.31.42.49:/opt/tomcat9/webapps/"
+                sh "ssh ec2-user@172.31.42.49 /opt/tomcat9/bin/shutdown.sh"
+                sh "ssh ec2-user@172.31.42.49 /opt/tomcat9/bin/startup.sh"
+               }
+            }
+        }
+    }
+}    
+
