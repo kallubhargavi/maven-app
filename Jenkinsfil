@@ -11,17 +11,32 @@ pipeline {
 
     stages {
         stage('git checkout') {
+        when{
+            expression{
+                        "params.BRANCH_NAME==devlop"
+            }
+            }
             steps {
               git branch: "${params.BRANCH_NAME}", credentialsId: 'github', url: 'https://github.com/kallubhargavi/maven-app' 
             }
         }
 
         stage('maven build') {
+        when{
+            expression{
+                        "params.BRANCH_NAME==devlop"
+            }
+            }
             steps {
                 sh 'mvn clean package'
             }
         }
          stage('tomcat dev') {
+         when{
+            expression{
+                        "params.BRANCH_NAME==devlop"
+            }
+            }
             steps {
                 sshagent(['tomcat-deploy']) {
                 sh "scp -o StrictHostKeyChecking=no  target/*.war $TOMCAT_USER@$TOMCAT_ID:/opt/tomcat9/webapps/"
