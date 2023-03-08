@@ -5,11 +5,14 @@ pipeline {
        TOMCAT_ID = "172.31.42.49"
        TOMCAT_USER = "ec2-user"
                 }
+    parameters {
+       string defaultValue: 'main', description: 'choose branch to deploy and build', name: 'BRANCH_NAME'
+                }
 
     stages {
         stage('git checkout') {
             steps {
-               git credentialsId: 'github', url: 'https://github.com/kallubhargavi/maven-app' 
+              git branch: "${params.BRANCH_NAME}", credentialsId: 'github', url: 'https://github.com/kallubhargavi/maven-app' 
             }
         }
 
