@@ -13,7 +13,7 @@ pipeline {
         stage('git checkout') {
         when{
             expression{
-                        "params.BRANCH_NAME==develop"
+                        params.BRANCH_NAME=="develop"
             }
             }
             steps {
@@ -24,7 +24,7 @@ pipeline {
         stage('maven build') {
         when{
             expression{
-                        "params.BRANCH_NAME==develop"
+                        params.BRANCH_NAME=="develop"
             }
             }
             steps {
@@ -34,7 +34,7 @@ pipeline {
          stage('tomcat dev') {
          when{
             expression{
-                        "params.BRANCH_NAME==develop"
+                       params.BRANCH_NAME=="develop"
             }
             }
             steps {
