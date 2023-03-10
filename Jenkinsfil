@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+    
+    environment {
+       TOMCAT_ID = "172.31.42.49"
+       TOMCAT_USER = "ec2-user"
+                }
+    parameters {
+       string defaultValue: 'main', description: 'choose branch to deploy and build', name: 'branchname'
+                }
+
+    stages {
+        stage('git checkout') {
+        when{
+            expression{
+                        params.branchname == "develop"
+            }
+            }
+            steps {
+              git branch: "${params.branchname}", credentialsId: 'github', url: 'https://github.com/kallubhargavi/maven-app' 
+            }
+        }
+
+        stage('maven build') {
+        when{
+            expression{
+                        params.branchname == "develop"
+            }
+            }
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+         stage('tomcat dev') {
+         when{
+            expression{
+                       params.branchname == "develop"
+            }
+            }
+            steps {
+                sshagent(['tomcat-deploy']) {
+                sh "scp -o StrictHostKeyChecking=no  target/*.war $TOMCAT_USER@$TOMCAT_ID:/opt/tomcat9/webapps/"
+                sh "ssh $TOMCAT_USER@$TOMCAT_ID /opt/tomcat9/bin/shutdown.sh"
+                sh "ssh $TOMCAT_USER@$TOMCAT_ID /opt/tomcat9/bin/startup.sh"
+               }
+            }
+        }
+    }
+    post {
+  success {
+        echo "job successed, sending success email"
+  }
+  failure {
+        echo "job failed, sending failure email"
+  }
+}
+
+}    
+
