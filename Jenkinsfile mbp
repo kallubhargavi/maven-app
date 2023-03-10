@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('maven build') {
           when{
-            branch 'devlop'
+            branch 'test'
           }
             steps {
                 echo 'deploy to develop'
