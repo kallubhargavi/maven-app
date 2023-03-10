@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+  
+    stages {
+        stage('maven build') {
+          when{
+            branch 'devlop'
+          }
+            steps {
+                echo 'deploy to develop'
+            }
+        }
+       stage('deploy dev') {
+          when{
+            branch 'devlop'
+          }
+            steps {
+                echo 'deploy to develop'
+            }
+        }
+       stage('deploy test') {
+          when{
+            branch 'test'
+          }
+            steps {
+                echo 'deploy to test'
+            }
+        }
+       stage('deploy prod') {
+          when{
+            branch 'main'
+          }
+            steps {
+                echo 'deploy to prod'
+            }
+        }
+      stage('deploy uat') {
+          when{
+            branch 'uat'
+          }
+            steps {
+                echo 'deploy to uat'
+            }
+        }
+    }
+}
